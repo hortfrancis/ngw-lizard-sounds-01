@@ -1,0 +1,6 @@
+name: Wheeze Croak
+duration: 30
+influence: 0.4
+---
+Old swamp lizard creature alternating slow rasping wheezes and low rattling croaks,
+wet mucus crackling in its throat. Dark, steady and unsettling, close-up.

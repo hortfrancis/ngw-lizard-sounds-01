@@ -1,0 +1,6 @@
+name: Tongue Slurp
+duration: 6
+influence: 0.5
+---
+Long slimy lizard tongue slurping and lapping at swamp water.
+Wet clicks, sticky smacks and drips. Close-up.

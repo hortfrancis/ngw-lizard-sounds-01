@@ -1,0 +1,7 @@
+name: Old Cough
+duration: 7
+influence: 0.6
+---
+Elderly lizard monster coughing up swamp water: phlegmy hacking and gargling,
+then a long, wet, wheezing hiss.
+Close-up creature vocal.

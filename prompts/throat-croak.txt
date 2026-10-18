@@ -1,0 +1,6 @@
+name: Throat Croak
+duration: 8
+influence: 0.5
+---
+Deep guttural lizard croak repeating slowly from a swollen, rattling throat sac.
+Low creature drone, eerie swamp at night.

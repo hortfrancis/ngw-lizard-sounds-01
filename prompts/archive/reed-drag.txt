@@ -1,0 +1,6 @@
+name: Reed Drag
+duration: 10
+influence: 0.4
+---
+Heavy scaly body dragging slowly through reeds and shallow muddy water.
+Sloshing, squelching clawed footsteps in a marsh. Creeping closer.

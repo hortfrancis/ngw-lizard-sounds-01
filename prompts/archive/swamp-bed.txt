@@ -1,0 +1,6 @@
+name: Swamp Bed
+duration: 20
+influence: 0.3
+---
+Night-time swamp ambience: dripping water, distant frogs and insects,
+and an unseen old lizard creature gargling and croaking far away in the dark.

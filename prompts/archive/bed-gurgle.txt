@@ -1,0 +1,7 @@
+name: Backing Gurgle
+duration: 30
+influence: 0.4
+---
+Continuous low bubbling gurgle of thick swamp water.
+Deep, slow bubbles rising through mud as a huge creature gargles underwater.
+Steady dark drone-like ambience with no pauses.

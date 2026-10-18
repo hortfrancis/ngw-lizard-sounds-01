@@ -1,0 +1,7 @@
+name: Mud Bubbles
+duration: 10
+influence: 0.4
+---
+Thick swamp mud bubbling and popping as something large exhales underneath.
+Low gloopy blorps and slow sucking squelches.
+Dark marsh ambience.

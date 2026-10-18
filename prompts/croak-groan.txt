@@ -1,0 +1,6 @@
+name: Croak Groan
+duration: 30
+influence: 0.4
+---
+Slow, deep guttural croaking from an ancient lizard monster's swollen throat sac,
+each croak stretching into a strained, creaking groan. Low creature drone, eerie swamp at night, close-up.

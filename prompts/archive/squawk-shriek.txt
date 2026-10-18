@@ -1,0 +1,6 @@
+name: Squawk Shriek
+duration: 1.5
+influence: 0.5
+loop: false
+---
+Single sharp squawk from a weird lizard creature. Shrill reptilian shriek, one-shot, close-up.

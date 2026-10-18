@@ -1,0 +1,6 @@
+name: Hinge Throat
+duration: 30
+influence: 0.4
+---
+Slow continuous creaking from an old lizard monster's throat, like a heavy iron gate hinge swinging slowly,
+mixed with wet reptile grunts. Eerie and unsettling, close-up.

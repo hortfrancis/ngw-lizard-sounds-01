@@ -1,0 +1,6 @@
+name: Sleeping Beast
+duration: 30
+influence: 0.4
+---
+A giant ancient lizard dozing in a bog: slow, heavy, snoring breaths with throaty croaks and creaks
+and the occasional wet snort. Faint night swamp ambience. Eerie, close-up.

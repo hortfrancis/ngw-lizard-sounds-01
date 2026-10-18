@@ -1,0 +1,12 @@
+# Copy this file to a new name without the leading _ (e.g. wet-snarl.txt) to use it.
+# The file name becomes the sound's id and its mp3 name.
+#
+# name:      button label in the app
+# duration:  0.5 to 30 seconds. Leave it out to let ElevenLabs choose.
+# influence: 0 to 1. Higher sticks closer to the prompt, lower gets weirder. Default 0.3.
+# loop:      true (default) or false. Looping gives a seamless repeat.
+name: My New Sound
+duration: 8
+influence: 0.4
+---
+What makes the sound, what it sounds like, and where it is.

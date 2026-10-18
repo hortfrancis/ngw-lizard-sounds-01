@@ -1,0 +1,6 @@
+name: Squawk Chirp
+duration: 2
+influence: 0.5
+loop: false
+---
+Short wet chirping screech from a strange swamp lizard. Gargled, bird-like squawk, one-shot.

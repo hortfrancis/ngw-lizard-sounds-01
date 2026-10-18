@@ -1,0 +1,174 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+<meta name="theme-color" content="#0b0f0a">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<title>The Deadly Lizard</title>
+<style>
+  :root { --bg: #0b0f0a; --fg: #c8e6b0; --dim: #6b7f5e; --hot: #7cff3a; --btn: #18210f; --stop: #5a1010; }
+  * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+  html, body { height: 100%; }
+  body { margin: 0; padding: 16px; background: var(--bg); color: var(--fg); font: 16px/1.3 system-ui, sans-serif; user-select: none;
+         display: flex; flex-direction: column; gap: 16px; }
+  h1 { margin: 0; font-size: 22px; }
+  #status { color: var(--dim); font-size: 14px; min-height: 1.3em; }
+  #go { flex: 1; max-height: 60vh; font: inherit; font-size: 40px; color: var(--hot); background: var(--btn);
+        border: 3px solid var(--hot); border-radius: 24px; }
+  #go.running { color: var(--fg); background: var(--stop); border-color: #a33; }
+  #go:disabled { opacity: .4; }
+  #now { color: var(--dim); font-size: 13px; min-height: 2.6em; }
+</style>
+</head>
+<body>
+<h1>🦎 The Deadly Lizard</h1>
+<div id="status">Loading…</div>
+<button id="go" disabled>▶ PLAY</button>
+<div id="now"></div>
+
+<script>
+const SOUNDS = /*__SOUNDS__*/[];
+
+// ---- The mix: tweak these ----
+const MIX = {
+  voices: 2,          // how many clips play at once (each voice chains clip after clip)
+  pitch: [-5, 1],     // semitones, picked at random for each clip (-12 = an octave down)
+  drift: 1,           // ± semitones the pitch wanders while a clip plays
+  volume: [0.7, 1],   // picked at random for each clip
+  fade: 3,            // seconds of fade in and fade out on every clip
+  overlap: [3, 8],    // seconds each clip overlaps the next one on the same voice
+  pan: 0.5,           // random left/right placement, 0 = centre, 1 = hard left/right
+  master: 1,          // overall volume
+  stopFade: 1.5,      // seconds to fade out when you press stop
+};
+
+const $ = (id) => document.getElementById(id);
+const status = (t) => ($('status').textContent = t);
+const rand = (a, b) => a + Math.random() * (b - a);
+const rate = (semitones) => 2 ** (semitones / 12);
+
+let ctx, bus = null, timers = [], playing = [], recent = [];
+const buffers = {};
+
+async function decodeAll() {
+  ctx = new (window.AudioContext || window.webkitAudioContext)();
+  await Promise.all(SOUNDS.map(async (s) => {
+    const bytes = Uint8Array.from(atob(s.src.split(',')[1]), (c) => c.charCodeAt(0));
+    buffers[s.id] = await ctx.decodeAudioData(bytes.buffer);
+  }));
+}
+
+// Pick a clip that isn't already playing and wasn't used in the last few picks.
+function pick() {
+  const ids = SOUNDS.map((s) => s.id);
+  const busy = new Set([...playing.map((p) => p.id), ...recent]);
+  const fresh = ids.filter((id) => !busy.has(id));
+  const pool = fresh.length ? fresh : ids.filter((id) => !playing.some((p) => p.id === id));
+  const id = (pool.length ? pool : ids)[Math.floor(Math.random() * (pool.length || ids.length))];
+  recent = [id, ...recent].slice(0, Math.floor(ids.length / 2));
+  return id;
+}
+
+// Play one clip on a voice starting at `at`, then schedule that voice's next clip to overlap its end.
+function voice(at, out) {
+  if (bus !== out) return; // stopped since this was scheduled
+  const id = pick();
+  const buf = buffers[id];
+  const r = rate(rand(...MIX.pitch));
+  const dur = buf.duration / r;
+  const fade = Math.min(MIX.fade, dur / 3);
+  const end = at + dur;
+  const vol = rand(...MIX.volume);
+
+  const src = ctx.createBufferSource();
+  src.buffer = buf;
+  src.playbackRate.setValueAtTime(r, at);
+  src.playbackRate.linearRampToValueAtTime(r * rate(rand(-MIX.drift, MIX.drift)), at + dur / 2);
+  src.playbackRate.linearRampToValueAtTime(r, end);
+
+  const gain = ctx.createGain();
+  gain.gain.setValueAtTime(0, at);
+  gain.gain.linearRampToValueAtTime(vol, at + fade);
+  gain.gain.setValueAtTime(vol, end - fade);
+  gain.gain.linearRampToValueAtTime(0, end);
+
+  src.connect(gain);
+  if (ctx.createStereoPanner) {
+    const pan = ctx.createStereoPanner();
+    pan.pan.value = rand(-MIX.pan, MIX.pan);
+    gain.connect(pan);
+    pan.connect(out);
+  } else gain.connect(out);
+
+  src.start(at);
+  src.stop(end);
+  const entry = { id, src, at };
+  playing.push(entry);
+  src.onended = () => { playing = playing.filter((p) => p !== entry); showNow(); };
+  setTimeout(showNow, Math.max(0, (at - ctx.currentTime) * 1000));
+
+  const next = end - Math.min(rand(...MIX.overlap), dur / 2);
+  timers.push(setTimeout(() => voice(next, out), Math.max(0, (next - ctx.currentTime - 1) * 1000)));
+}
+
+function showNow() {
+  const names = playing.filter((p) => p.at <= ctx.currentTime + 0.05).map((p) => SOUNDS.find((s) => s.id === p.id).name);
+  $('now').textContent = bus && names.length ? 'Now: ' + names.join(' + ') : '';
+}
+
+async function play() {
+  // iOS 17+: play through the silent switch.
+  try { if (navigator.audioSession) navigator.audioSession.type = 'playback'; } catch {}
+  await ctx.resume();
+  try { await navigator.wakeLock?.request('screen'); } catch {}
+
+  bus = ctx.createGain();
+  bus.gain.value = MIX.master;
+  bus.connect(ctx.destination);
+  const t = ctx.currentTime + 0.1;
+  for (let v = 0; v < MIX.voices; v++) voice(v === 0 ? t : t + rand(4, 10) * v, bus);
+
+  $('go').textContent = '■ STOP';
+  $('go').classList.add('running');
+  status('The lizard is awake.');
+}
+
+function stop() {
+  const out = bus;
+  bus = null;
+  timers.forEach(clearTimeout);
+  timers = [];
+  out.gain.setTargetAtTime(0, ctx.currentTime, MIX.stopFade / 4);
+  const srcs = playing.map((p) => p.src);
+  playing = [];
+  setTimeout(() => { srcs.forEach((s) => { try { s.stop(); } catch {} }); out.disconnect(); }, MIX.stopFade * 1000);
+
+  $('go').textContent = '▶ PLAY';
+  $('go').classList.remove('running');
+  status('Silent… for now.');
+  showNow();
+}
+
+async function init() {
+  if (!SOUNDS.length) return status('No sounds bundled. Run `npm run generate` then `npm start`.');
+  if ('serviceWorker' in navigator && isSecureContext) navigator.serviceWorker.register('sw.js').catch(() => {});
+  try {
+    await decodeAll();
+  } catch (err) {
+    return status('Failed to decode sounds: ' + err.message);
+  }
+  $('go').onclick = () => (bus ? stop() : play());
+  $('go').disabled = false;
+  status(`${SOUNDS.length} sounds loaded. You can go into Airplane mode now.`);
+}
+
+// Re-acquire the screen wake lock when returning to the tab.
+document.addEventListener('visibilitychange', () => {
+  if (document.visibilityState === 'visible' && bus) navigator.wakeLock?.request('screen').catch(() => {});
+});
+
+init();
+</script>
+</body>
+</html>

@@ -1,0 +1,6 @@
+name: Hiss Gurgle
+duration: 7
+influence: 0.5
+---
+Low menacing reptile hiss that dissolves into wet gurgling and bubbling saliva.
+Horror creature vocal, close-up.

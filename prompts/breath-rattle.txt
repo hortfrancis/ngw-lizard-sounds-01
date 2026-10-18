@@ -1,0 +1,6 @@
+name: Breath Rattle
+duration: 30
+influence: 0.4
+---
+Huge old reptile breathing slowly in the dark: long rasping inhales through wet, clogged nostrils
+and rattling, phlegmy exhales. Faint swamp ambience behind. Eerie, steady, close-up creature breath.

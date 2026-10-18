@@ -1,0 +1,6 @@
+name: Squawk Yelp
+duration: 1.5
+influence: 0.5
+loop: false
+---
+Startled lizard monster yelp: a quick raspy hiss-squawk, one-shot, close-up.

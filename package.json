@@ -1,0 +1,21 @@
+{
+  "name": "ngw-lizard-sounds",
+  "version": "1.0.0",
+  "private": true,
+  "description": "The Deadly Lizard: looping weird lizard sounds for Norwich Ghost Walks Halloween 2026",
+  "type": "module",
+  "scripts": {
+    "set-key": "dotenvx set ELEVENLABS_API_KEY",
+    "generate": "dotenvx run -- node scripts/generate.mjs",
+    "build": "node scripts/build.mjs",
+    "serve": "node scripts/serve.mjs",
+    "start": "npm run build && npm run serve",
+    "deploy": "npm run build && npx -y wrangler@4 deploy"
+  },
+  "engines": {
+    "node": ">=20"
+  },
+  "devDependencies": {
+    "@dotenvx/dotenvx": "^2.38.0"
+  }
+}

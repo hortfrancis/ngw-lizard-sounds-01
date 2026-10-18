@@ -1,0 +1,7 @@
+name: Mid Creak
+duration: 30
+influence: 0.4
+---
+Slow continuous creaking and croaking from an old lizard monster's throat,
+like a rusty wooden door hinge mixed with a strained reptile groan.
+Eerie, steady and unsettling, close-up.

@@ -1,0 +1,7 @@
+name: Swamp Gargle
+duration: 8
+influence: 0.5
+---
+Old lizard monster gargling swamp water deep in its throat.
+Thick, wet, bubbling gurgle with slow throaty rattles.
+Close-up creature vocal, dark and gross.

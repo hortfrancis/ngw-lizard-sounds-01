@@ -1,0 +1,7 @@
+name: Bog Breath
+duration: 8
+influence: 0.5
+---
+Ancient reptile breathing slowly through wet, clogged nostrils.
+Rasping wheeze with a mucus rattle on every exhale.
+Faint swamp ambience behind. Close-up creature breath.
